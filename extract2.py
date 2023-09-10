@@ -2,6 +2,7 @@ import requests
 import unicodedata
 from bs4 import BeautifulSoup
 import pandas as pd
+import json
 
 
 def decode_unicode_escape(price_str):
@@ -42,8 +43,14 @@ if __name__ == "__main__":
     scraped_data = scrape_flipkart(search_keyword, num_pages_to_scrape)
     
     if scraped_data:
-        df = pd.DataFrame(scraped_data)
-        df.to_json(f"{search_keyword}_products.json", orient="records", lines=True, indent=4)
+        # df = pd.DataFrame(scraped_data)
+        json_data = json.dumps(scraped_data, indent=4)
+        with open('scraped_data.json', 'w') as json_file:
+            json_file.write(json_data)
+            print("Data has been scraped and stored in 'scraped_data.json'.")
+        # df.to_json(f"{search_keyword}_products.json", orient="records", lines=True, indent=4)
         print("Scraping completed. Data saved to CSV.")
     else:
         print("No data was scraped.")
+
+
